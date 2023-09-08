@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "260cfeb5-7f4c-4557-8c23-dbf0ad8bba07",
+		"name": "Mockapitesting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28512397",
+		"_collection_link": "https://www.postman.com/avionics-technologist-75140099/workspace/my-workspace/collection/28512397-260cfeb5-7f4c-4557-8c23-dbf0ad8bba07?action=share&source=collection_link&creator=28512397"
+	},
+	"item": [
+		{
+			"name": "getapitestingcourses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"\r",
+							"    jsonData.data.forEach(function(it) \r",
+							"    {\r",
+							"        if (it.category == \"Javascript\") \r",
+							"        {\r",
+							"            console.log(it.course);\r",
+							"            pm.environment.set(\"course\",it.course)// oly set in mock environment\r",
+							"        }\r",
+							"    })\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL}}/getapitestingcourses",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"getapitestingcourses"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/getapitestingcourses",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"getapitestingcourses"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "\n{\n    \"data\": [\n        {\n            \"course\": \"Postman\",\n            \"price\": 150,\n            \"category\": \"Javascript\"\n        },\n        {\n            \"course\": \"SoapUI\",\n            \"price\": 25,\n            \"category\": \"Groovy\"\n        },\n        {\n            \"course\": \"RestAssured\",\n            \"price\": 100,\n            \"category\": \"Java\"\n        },\n        {\n            \"course\": \"RestAssured\",\n            \"price\": 100,\n            \"category\": \"Java\"\n        }\n    ]\n}\n"
+				}
+			]
+		},
+		{
+			"name": "getcourse_postman",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// student count for the course must be gretaer than 10000\r",
+							"\r",
+							"const jsondata=pm.response.json();\r",
+							"pm.expect(jsondata.students > 10000).to.be.true;// Students count to be greater than 10000\r",
+							"pm.expect(jsondata.category).to.eql(\"javascript\");// Category must be javascript"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/getcoursedetails?name={{Course}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"getcoursedetails"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{Course}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "getcourse_postman",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/getcoursedetails?name=postman",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"getcoursedetails"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "postman"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"name\": \"postman\",\r\n    \"category\": \"javascript\",\r\n    \"content\": \"videos\",\r\n    \"length\": \"15hours\",\r\n    \"students\": 12342\r\n}\r\n"
+				},
+				{
+					"name": "getcourse_api",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/getcoursedetails?name=api",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"getcoursedetails"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "api"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"name\": \"api\",\r\n    \"category\": \"java\",\r\n    \"content\": \"pics\",\r\n    \"length\": \"13hours\",\r\n    \"students\": 12000\r\n}\r\n"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://c893e49c-7a41-48a2-a17a-d442cc29f1f4.mock.pstmn.io"
+		}
+	]
+}
