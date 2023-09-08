@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "b8430fbf-d72a-4d00-a8f7-7991c81c69b8",
+		"name": "Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28512397"
+	},
+	"item": [
+		{
+			"name": "create book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"const bodyresponse=pm.response.json();\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(bodyresponse).have.property(\"ID\");\r",
+							"    pm.expect(bodyresponse.ID).have.to.eql(\"varsh81108\");\r",
+							"    pm.expect(bodyresponse.Msg).have.to.eql(\"Book created\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\"name\":\"Learn API Automation with Java\",\r\n\"isbn\":\"varsh\",\r\n\"aisle\":\"81108\",\r\n\"author\":\"varsh11a abc\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{B_UAT}}/Library/Addbook.php",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetch with author",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{B_UAT}}/Library/GetBook.php?AuthorName=John abc",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "AuthorName",
+							"value": "John abc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetch with ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{B_UAT}}/Library/GetBook.php?ID=bcwqd222427",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"GetBook.php"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "bcwqd222427"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n\"ID\" : \"a23h345122332\"\r\n \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{B_UAT}}/Library/DeleteBook.php",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"DeleteBook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create book- ISBN_Rand number",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const code=pm.globals.get(\"Companycode\");\r",
+							"const intnumber=pm.variables.replaceIn('{{$randomInt}}');\r",
+							"isbn = code + intnumber\r",
+							"pm.collectionVariables.set(\"ISBN\",code+intnumber);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"successfully added\");\r",
+							"});\r",
+							"pm.test(\"Verify ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.Msg).to.eql(\"successfully added\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\"name\":\"Learn API Automation with Java\",\r\n\"isbn\":\"{{ISBN}}\",\r\n\"aisle\":\"81108\",\r\n\"author\":\"varsh11a abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{B_UAT}}/Library/Addbook.php",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ISBN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
