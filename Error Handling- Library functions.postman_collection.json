@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "cc6a4d24-d857-438b-ad96-38e3c2292356",
+		"name": "Error Handling- Library functions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28512397",
+		"_collection_link": "https://www.postman.com/avionics-technologist-75140099/workspace/my-workspace/collection/28512397-cc6a4d24-d857-438b-ad96-38e3c2292356?action=share&source=collection_link&creator=28512397"
+	},
+	"item": [
+		{
+			"name": "Createbook",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Global variable where json response is stored as object\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"// assertion for checking the response time\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"\r",
+							"try{\r",
+							"    pm.response.to.have.status(200);\r",
+							"    \r",
+							"}\r",
+							"finally{\r",
+							"if((jsonData.Msg).includes(\"Book Already Exists\")){\r",
+							"    pm.collectionVariables.set(\"flag\",true);\r",
+							"    Cleanup();\r",
+							"}\r",
+							"}\r",
+							"});\r",
+							"\r",
+							"\r",
+							"function Cleanup(){\r",
+							"    const ID=generateID();\r",
+							"    pm.environment.set(\"UAT_BOOKID\",ID);\r",
+							"    postman.setNextRequest(\"Deleteabook\");\r",
+							"}\r",
+							"\r",
+							"function generateID(){\r",
+							" const request= JSON.parse(pm.request.body.raw);// Coming from request\r",
+							"\r",
+							"const aisle=request.aisle;\r",
+							"const isbn=request.isbn;\r",
+							"// Coming from response\r",
+							"   console.log(isbn+aisle);\r",
+							"   return (isbn+aisle);\r",
+							"\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\"name\":\"Postman\",\r\n\"isbn\":\"ISBN\",\r\n\"aisle\":\"81108\",\r\n\"author\":\"{{author}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{B_UAT}}/Library/Addbook.php",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"Addbook.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deleteabook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Book deletion is success\", function () {",
+							"    const resp=pm.response.json();",
+							"    if(pm.collectionVariables.get(\"flag\")){",
+							"    console.log(pm.collectionVariables.get(\"flag\"));",
+							"    console.log(resp.msg);",
+							"    pm.expect(resp.msg).to.eql(\"book is successfully deleted\");",
+							"    pm.collectionVariables.set(\"flag\",false)",
+							"    postman.setNextRequest(\"Createbook\");",
+							"    }",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n\"ID\" : \"{{UAT_BOOKID}}\"\r\n \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{B_UAT}}/Library/DeleteBook.php",
+					"host": [
+						"{{B_UAT}}"
+					],
+					"path": [
+						"Library",
+						"DeleteBook.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ISBN",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "author",
+			"value": ""
+		},
+		{
+			"key": "flag",
+			"value": "false",
+			"type": "string"
+		}
+	]
+}
